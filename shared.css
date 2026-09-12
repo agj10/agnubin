@@ -22,7 +22,7 @@ button:disabled { cursor: not-allowed; }
 .brand-icon { display: block; width: 58px; height: 58px; object-fit: cover; background: #000; }
 .settings-button, .shortcut-button { display: inline-flex; align-items: center; gap: 7px; border: 0; background: transparent; color: var(--text); font-size: 13px; font-weight: 700; }
 .settings-button { padding: 7px 0 7px 9px; }
-.settings-button svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
+.settings-button svg { width: 18px; height: 18px; fill: currentColor; }
 .site-status { min-height: 39px; margin: 9px 0 11px; padding: 10px 11px; border: 1px solid var(--line); background: rgba(255, 253, 248, .58); color: var(--muted); font-size: 12px; line-height: 1.35; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .action-list { display: grid; gap: 8px; }
 .action-button { min-height: 62px; padding: 11px 14px; display: flex; align-items: center; justify-content: center; gap: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--text); font-size: 15px; font-weight: 800; transition: background .15s, border-color .15s; }
