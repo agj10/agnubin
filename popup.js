@@ -13,7 +13,7 @@ const render = async () => {
     activeUrl = tab.url;
     const hostname = new URL(tab.url).hostname.replace(/^www\./, "");
     $("#site-name").textContent = hostname;
-    $("#site-state").textContent = "선택한 항목을 정리할 수 있어요";
+    $("#site-state").textContent = "";
     $("#clear-site").disabled = false;
   } else {
     $("#site-name").textContent = "이 페이지에서는 사용할 수 없어요";
