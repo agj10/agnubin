@@ -4,15 +4,21 @@
   <body class="popup-body">
     <main class="popup">
       <header class="popup-header">
-        <div class="brand-tile"><img id="brand-icon" src="assets/agnubin-dark-raw.png" alt="agnubin"></div>
-        <section class="site-summary" id="site-card"><span class="eyebrow">현재 사이트</span><strong id="site-name">확인 중</strong><span class="site-state" id="site-state"></span></section>
+        <img class="brand-icon" id="brand-icon" src="assets/agnubin-dark-raw.png" alt="agnubin">
+        <button class="settings-button" id="open-settings" type="button" aria-label="설정 열기">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="m19 13.4 1.5.6v-4l-1.5.6a7.4 7.4 0 0 0-.8-1.9l.7-1.5-2.8-2.8-1.5.7a7.4 7.4 0 0 0-1.9-.8L12 2.9H8l-.6 1.5a7.4 7.4 0 0 0-1.9.8L4 4.5 1.2 7.3l.7 1.5a7.4 7.4 0 0 0-.8 1.9L-.4 11.3v4l1.5-.6a7.4 7.4 0 0 0 .8 1.9l-.7 1.5L4 20.9l1.5-.7a7.4 7.4 0 0 0 1.9.8l.6 1.5h4l.6-1.5a7.4 7.4 0 0 0 1.9-.8l1.5.7 2.8-2.8-.7-1.5a7.4 7.4 0 0 0 .8-1.9Z"></path></svg>
+          <span>설정</span>
+        </button>
       </header>
-      <div class="action-grid">
-        <button class="action-button action-primary" id="clear-all"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3m-8 0 1 13h8l1-13M10 11v5m4-5v5"/></svg><span>전체 정리</span></button>
-        <button class="action-button action-secondary" id="clear-site" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M4.8 8.5h14.4M4.8 15.5h14.4M12 4c2.2 2.2 3.2 4.9 3.2 8S14.2 17.8 12 20c-2.2-2.2-3.2-4.9-3.2-8S9.8 6.2 12 4"/></svg><span>이 사이트</span></button>
+      <p class="site-status" id="site-name">현재 사이트 확인 중</p>
+      <div class="action-list">
+        <button class="action-button action-primary" id="clear-all" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3m-8 0 1 13h8l1-13M10 11v5m4-5v5"></path></svg><span>전체 정리</span></button>
+        <button class="action-button action-secondary" id="clear-site" type="button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.5"></circle><path d="M12 8.5v7M8.5 12h7"></path></svg><span>이 사이트 정리</span></button>
       </div>
-      <div class="utility-row"><button class="shortcut-button" id="shortcut-toggle"><span class="dot"></span><span id="shortcut-label">단축키 켜짐</span></button><button class="gear-button" id="open-settings" aria-label="설정 열기"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19 13.4v-2.8l-2-.7a7 7 0 0 0-.6-1.4l.9-1.9-2-2-1.9.9a7 7 0 0 0-1.4-.6L11 3H8.2l-.7 2a7 7 0 0 0-1.4.6l-1.9-.9-2 2 .9 1.9A7 7 0 0 0 2.5 10l-2 .6v2.8l2 .7a7 7 0 0 0 .6 1.4l-.9 1.9 2 2 1.9-.9a7 7 0 0 0 1.4.6l.7 2H11l.7-2a7 7 0 0 0 1.4-.6l1.9.9 2-2-.9-1.9a7 7 0 0 0 .6-1.4l2-.7Z"/></svg><span>설정</span></button></div>
-      <p class="status" id="status" aria-live="polite"></p>
+      <div class="popup-footer">
+        <button class="shortcut-button" id="shortcut-toggle" type="button"><span class="dot"></span><span id="shortcut-label">단축키 켜짐</span></button>
+        <p class="status" id="status" aria-live="polite"></p>
+      </div>
     </main>
     <script type="module" src="popup.js"></script>
   </body>

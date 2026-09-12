@@ -7,13 +7,13 @@ const normalizeUrl = (value) => { const url = new URL(/^https?:\/\//i.test(value
 const save = async () => chrome.storage.sync.set(settings);
 
 const renderTypes = () => {
-  $("#type-grid").innerHTML = DATA_TYPES.map(({ id, label, note, available }) => `<label class="type-card ${available === false ? "is-unavailable" : ""}"><input type="checkbox" value="${id}" ${settings.selectedTypes.includes(id) ? "checked" : ""} ${available === false ? "disabled" : ""}><span class="checkmark">✓</span><span><strong>${label}</strong><small>${note}</small></span></label>`).join("");
+  $("#type-grid").innerHTML = DATA_TYPES.filter(({ available }) => available !== false).map(({ id, label, note }) => `<label class="type-card"><input type="checkbox" value="${id}" ${settings.selectedTypes.includes(id) ? "checked" : ""}><span class="checkmark">✓</span><span><strong>${label}</strong><small>${note}</small></span></label>`).join("");
   document.querySelectorAll(".type-card input").forEach((input) => input.addEventListener("change", async () => { settings.selectedTypes = [...document.querySelectorAll(".type-card input:checked")].map((item) => item.value); await save(); }));
 };
 const renderSites = () => {
   $("#site-list").innerHTML = settings.savedSites.length
-    ? settings.savedSites.map((site) => `<li><span class="site-mark">⌁</span><span>${site}</span><button class="site-clear" data-clear-site="${site}">지우기</button><button aria-label="${site} 삭제" data-site="${site}">×</button></li>`).join("")
-    : `<li class="empty-site">아직 추가한 사이트가 없어요.</li>`;
+    ? settings.savedSites.map((site) => `<li><span>${site}</span><button class="site-clear" data-clear-site="${site}">지우기</button><button aria-label="${site} 삭제" data-site="${site}">×</button></li>`).join("")
+    : `<li class="empty-site">등록한 사이트 없음</li>`;
   document.querySelectorAll("[data-site]").forEach((button) => button.addEventListener("click", async () => { settings.savedSites = settings.savedSites.filter((site) => site !== button.dataset.site); await save(); renderSites(); }));
   document.querySelectorAll("[data-clear-site]").forEach((button) => button.addEventListener("click", async () => {
     const site = button.dataset.clearSite;
@@ -24,17 +24,17 @@ const renderSites = () => {
     setTimeout(() => { button.disabled = false; button.textContent = "지우기"; }, 1500);
   }));
 };
-const renderCommands = async () => { const commands = await chrome.commands.getAll(); const names = { "clear-selected-data": "선택한 브라우저 데이터 지우기", "clear-current-site": "현재 사이트만 지우기" }; $("#command-list").innerHTML = commands.map((command) => `<div class="command-row"><span>${names[command.name]}</span><kbd>${command.shortcut || "아직 지정하지 않음"}</kbd></div>`).join(""); };
+const renderCommands = async () => { const commands = await chrome.commands.getAll(); const names = { "clear-selected-data": "전체 정리", "clear-current-site": "현재 사이트 정리" }; $("#command-list").innerHTML = commands.filter((command) => names[command.name]).map((command) => `<div class="command-row"><span>${names[command.name]}</span><kbd>${command.shortcut || "지정 안 함"}</kbd></div>`).join(""); };
 const renderIntervalClean = () => {
   const enabled = settings.autoCleanOnInterval;
   $("#interval-clean-toggle").checked = enabled;
   $("#interval-minutes").value = settings.autoCleanIntervalMinutes;
   $("#interval-minutes").disabled = !enabled;
   $("#interval-controls").classList.toggle("is-disabled", !enabled);
-  $("#interval-note").textContent = enabled ? `켜짐 · ${settings.autoCleanIntervalMinutes}분마다 선택한 데이터를 정리합니다.` : "주기 정리는 꺼져 있어요.";
 };
 const renderTheme = () => {
-  applyTheme(settings.theme);
+  const resolved = applyTheme(settings.theme);
+  $("#settings-brand-icon").src = `assets/agnubin-${resolved}-raw.png`;
   document.querySelectorAll("[data-theme-choice]").forEach((button) => {
     const selected = button.dataset.themeChoice === settings.theme;
     button.classList.toggle("is-selected", selected);
@@ -51,7 +51,6 @@ $("#open-shortcuts").addEventListener("click", () => {
 $("#auto-clean-toggle").addEventListener("change", async (event) => {
   settings.autoCleanOnClose = event.target.checked;
   await save();
-  $("#automatic-note").textContent = settings.autoCleanOnClose ? "켜짐 · 마지막 창이 닫히면 선택한 데이터를 정리합니다." : "자동 정리는 꺼져 있어요.";
 });
 $("#interval-clean-toggle").addEventListener("change", async (event) => {
   settings.autoCleanOnInterval = event.target.checked;
@@ -70,5 +69,5 @@ document.querySelectorAll("[data-theme-choice]").forEach((button) => button.addE
   renderTheme();
 }));
 
-(async () => { settings = await getSettings(); $("#time-range").value = settings.timeRange || DEFAULTS.timeRange; $("#auto-clean-toggle").checked = settings.autoCleanOnClose; $("#automatic-note").textContent = settings.autoCleanOnClose ? "켜짐 · 마지막 창이 닫히면 선택한 데이터를 정리합니다." : "자동 정리는 꺼져 있어요."; renderTypes(); renderSites(); renderIntervalClean(); renderTheme(); renderCommands(); })();
+(async () => { settings = await getSettings(); $("#time-range").value = settings.timeRange || DEFAULTS.timeRange; $("#auto-clean-toggle").checked = settings.autoCleanOnClose; renderTypes(); renderSites(); renderIntervalClean(); renderTheme(); renderCommands(); })();
 window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { if (settings?.theme === "system") renderTheme(); });

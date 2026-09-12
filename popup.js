@@ -18,12 +18,12 @@ const render = async () => {
   if (tab?.url?.startsWith("http")) {
     activeUrl = tab.url;
     const hostname = new URL(tab.url).hostname.replace(/^www\./, "");
-    $("#site-name").textContent = hostname;
-    $("#site-state").textContent = "";
+    $("#site-name").textContent = `현재 사이트 · ${hostname}`;
     $("#clear-site").disabled = false;
   } else {
-    $("#site-name").textContent = "이 페이지에서는 사용할 수 없어요";
-    $("#site-state").textContent = "웹사이트를 열면 이 사이트만 정리할 수 있어요";
+    activeUrl = null;
+    $("#site-name").textContent = "현재 사이트 정리 불가";
+    $("#clear-site").disabled = true;
   }
 };
 
