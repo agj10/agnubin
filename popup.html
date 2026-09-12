@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ko">
+  <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>agnubin</title><link rel="stylesheet" href="shared.css"></head>
+  <body class="popup-body">
+    <main class="popup">
+      <header class="brand-row"><a class="brand" href="options.html" target="_blank" title="설정 열기">agnubin</a><span class="little-spark">✦</span></header>
+      <p class="intro">오늘 쌓인 브라우저 흔적을<br>가볍게 정리해요.</p>
+      <section class="site-card" id="site-card"><span class="site-mark">⌁</span><div><span class="eyebrow">현재 사이트</span><strong id="site-name">확인 중이에요</strong></div></section>
+      <div class="action-stack">
+        <button class="button button-main" id="clear-all"><span>선택한 데이터 지우기</span><b>↗</b></button>
+        <button class="button button-soft" id="clear-site" disabled><span id="site-action-label">현재 사이트만 지우기</span><b>⌫</b></button>
+      </div>
+      <div class="divider"></div>
+      <div class="utility-row"><button class="text-button" id="shortcut-toggle"><span class="dot"></span><span id="shortcut-label">단축키 사용 중</span></button><button class="gear-button" id="open-settings" aria-label="설정 열기">⚙ <span>설정</span></button></div>
+      <p class="status" id="status" aria-live="polite">설정한 항목만 지워집니다.</p>
+      <i class="doodle doodle-one">⌁</i><i class="doodle doodle-two">✳</i>
+    </main>
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

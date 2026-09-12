@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "agnubin · 브라우저 정리",
+  "version": "0.1.0",
+  "description": "미리 고른 브라우저 데이터를 한 번에, 또는 현재 사이트만 정리합니다.",
+  "permissions": [
+    "browsingData",
+    "storage",
+    "tabs",
+    "cookies",
+    "history",
+    "downloads",
+    "windows",
+    "alarms"
+  ],
+  "action": {
+    "default_title": "agnubin · 브라우저 정리",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "options_page": "options.html",
+  "commands": {
+    "clear-selected-data": {
+      "suggested_key": {
+        "default": "Alt+Shift+Delete",
+        "mac": "MacCtrl+Shift+Delete"
+      },
+      "description": "선택한 브라우저 데이터 지우기"
+    },
+    "clear-current-site": {
+      "suggested_key": {
+        "default": "Alt+Shift+Period",
+        "mac": "MacCtrl+Shift+Period"
+      },
+      "description": "현재 사이트 데이터만 지우기"
+    }
+  }
+}
