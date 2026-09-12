@@ -16,7 +16,7 @@ export const DATA_TYPES = [
 ];
 
 export const DEFAULTS = {
-  selectedTypes: ["history", "downloads", "cookies", "cache", "formData", "localStorage", "indexedDB", "serviceWorkers", "cacheStorage"],
+  selectedTypes: ["history"],
   timeRange: "all",
   savedSites: [],
   shortcutsEnabled: true,

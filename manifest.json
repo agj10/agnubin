@@ -11,7 +11,8 @@
     "history",
     "downloads",
     "windows",
-    "alarms"
+    "alarms",
+    "notifications"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -28,15 +29,15 @@
   "commands": {
     "clear-selected-data": {
       "suggested_key": {
-        "default": "Alt+Shift+Delete",
-        "mac": "MacCtrl+Shift+Delete"
+        "default": "Ctrl+Shift+U",
+        "mac": "MacCtrl+Shift+U"
       },
       "description": "선택한 브라우저 데이터 지우기"
     },
     "clear-current-site": {
       "suggested_key": {
-        "default": "Alt+Shift+Period",
-        "mac": "MacCtrl+Shift+Period"
+        "default": "Ctrl+Shift+L",
+        "mac": "MacCtrl+Shift+L"
       },
       "description": "현재 사이트 데이터만 지우기"
     }

@@ -14,7 +14,7 @@ const formatBytes = (bytes) => {
 
 const renderTypes = () => {
   $("#type-grid").innerHTML = DATA_TYPES.filter(({ available }) => available !== false).map(({ id, label, note }) => `<label class="type-card"><input type="checkbox" value="${id}" ${settings.selectedTypes.includes(id) ? "checked" : ""}><span class="checkmark">✓</span><span><strong>${label}</strong><small>${note}</small><em class="data-summary" data-summary-for="${id}">집계 중</em></span></label>`).join("");
-  document.querySelectorAll(".type-card input").forEach((input) => input.addEventListener("change", async () => { settings.selectedTypes = [...document.querySelectorAll(".type-card input:checked")].map((item) => item.value); await save(); }));
+  document.querySelectorAll(".type-card input").forEach((input) => input.addEventListener("change", async () => { settings.selectedTypes = [...document.querySelectorAll(".type-card input:checked")].map((item) => item.value); settings.selectedTypesCustomized = true; await save(); }));
 };
 const renderDataSummary = async () => {
   try {
@@ -38,8 +38,8 @@ const renderSites = () => {
     const site = button.dataset.clearSite;
     button.disabled = true;
     button.textContent = "정리 중";
-    const result = await chrome.runtime.sendMessage({ type: "clear-site", url: site });
-    button.textContent = result.ok ? "완료" : "실패";
+    const result = await chrome.runtime.sendMessage({ type: "request-confirmation", action: "clear-site", url: site });
+    button.textContent = result.ok ? "확인" : "실패";
     setTimeout(() => { button.disabled = false; button.textContent = "지우기"; }, 1500);
   }));
 };

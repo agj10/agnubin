@@ -1,6 +1,26 @@
 import { dataObject, getSettings, sinceFor } from "./defaults.js";
 
 const PERIODIC_CLEAN_ALARM = "agnubin-periodic-clean";
+const notificationIcon = chrome.runtime.getURL("assets/agnubin-dark-raw.png");
+
+const notify = async (message) => {
+  try {
+    await chrome.notifications.create({ type: "basic", iconUrl: notificationIcon, title: "agnubin", message });
+  } catch (error) {
+    console.warn("agnubin notification failed", error);
+  }
+};
+
+const openConfirmation = async ({ action, url }) => {
+  const query = new URLSearchParams({ action });
+  if (url) query.set("url", url);
+  await chrome.windows.create({
+    url: `confirm.html?${query.toString()}`,
+    type: "popup",
+    width: 350,
+    height: 210
+  });
+};
 
 const getDataSummary = async () => {
   const { timeRange } = await getSettings();
@@ -23,7 +43,9 @@ const clearAll = async () => {
   const types = dataObject(settings.selectedTypes);
   if (!Object.keys(types).length) return { label: "먼저 설정에서 지울 항목을 골라 주세요." };
   await chrome.browsingData.remove({ since: sinceFor(settings.timeRange) }, types);
-  return { label: "선택한 브라우저 데이터를 정리했어요." };
+  const label = "선택한 브라우저 데이터를 정리했어요.";
+  void notify(label);
+  return { label };
 };
 
 const runAutomaticClear = async () => {
@@ -67,7 +89,9 @@ const clearSite = async (url) => {
       try { return entry.url && new URL(entry.url).origin === origin; } catch { return false; }
     }).map((entry) => chrome.history.deleteUrl({ url: entry.url })));
   }
-  return { label: `${new URL(url).hostname}의 선택 가능한 데이터를 정리했어요.`, skipped: settings.selectedTypes.filter((type) => !siteTypes.includes(type) && type !== "history") };
+  const label = `${new URL(url).hostname}의 선택한 데이터를 정리했어요.`;
+  void notify(label);
+  return { label, skipped: settings.selectedTypes.filter((type) => !siteTypes.includes(type) && type !== "history") };
 };
 
 chrome.commands.onCommand.addListener(async (command) => {
@@ -111,13 +135,26 @@ chrome.runtime.onStartup.addListener(async () => {
   if ((autoCleanOnClose || autoCleanOnInterval) && autoCleanPending) await runAutomaticClear();
 });
 
-chrome.runtime.onInstalled.addListener(() => { void syncPeriodicCleanAlarm(); });
+chrome.runtime.onInstalled.addListener(async (details) => {
+  if (details.reason === "update") {
+    const previousDefault = ["history", "downloads", "cookies", "cache", "formData", "localStorage", "indexedDB", "serviceWorkers", "cacheStorage"];
+    const { selectedTypes, selectedTypesCustomized } = await chrome.storage.sync.get(["selectedTypes", "selectedTypesCustomized"]);
+    if (!selectedTypesCustomized && Array.isArray(selectedTypes) && selectedTypes.length === previousDefault.length && selectedTypes.every((type, index) => type === previousDefault[index])) {
+      await chrome.storage.sync.set({ selectedTypes: ["history"] });
+    }
+  }
+  void syncPeriodicCleanAlarm();
+});
 void syncPeriodicCleanAlarm();
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   (async () => {
     if (message.type === "clear-all") sendResponse({ ok: true, ...(await clearAll()) });
     if (message.type === "clear-site") sendResponse({ ok: true, ...(await clearSite(message.url)) });
+    if (message.type === "request-confirmation") {
+      await openConfirmation({ action: message.action, url: message.url });
+      sendResponse({ ok: true });
+    }
     if (message.type === "get-data-summary") sendResponse({ ok: true, summary: await getDataSummary() });
   })().catch((error) => sendResponse({ ok: false, error: error.message }));
   return true;

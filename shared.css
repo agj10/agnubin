@@ -36,6 +36,7 @@ button:disabled { cursor: not-allowed; }
 .dot { width: 9px; height: 9px; background: #78aa67; border-radius: 50%; box-shadow: 0 0 0 3px rgba(120, 170, 103, .17); }
 .shortcut-button.is-off .dot { background: #969185; box-shadow: none; }
 .status { max-width: 145px; margin: 0; color: #856500; font-size: 11px; text-align: right; }.status:empty { display: none; }.status.error { color: #a44c39; }
+.confirm-body { width: 350px; min-height: 210px; display: grid; place-items: center; padding: 16px; background: var(--bg); }.confirm-panel { width: 100%; }.confirm-panel h1 { margin: 0; font-size: 19px; letter-spacing: -.7px; }.confirm-panel p { margin: 9px 0 0; color: var(--muted); font-size: 12px; }.confirm-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 22px; }.confirm-actions .button { min-width: 76px; justify-content: center; }.confirm-actions .button-soft { margin-top: 0; }.confirm-status { min-height: 17px; text-align: right; }.confirm-status:empty { visibility: hidden; }
 
 .options-body { min-width: 720px; }
 .topbar { max-width: 1010px; height: 72px; margin: auto; padding: 12px 24px; display: flex; align-items: center; gap: 42px; border-bottom: 1px solid var(--line); }

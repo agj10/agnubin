@@ -30,10 +30,9 @@ const render = async () => {
 const clear = async (type) => {
   const button = type === "clear-all" ? $("#clear-all") : $("#clear-site");
   button.disabled = true;
-  setStatus("정리하고 있어요…");
-  const response = await chrome.runtime.sendMessage(type === "clear-all" ? { type } : { type, url: activeUrl });
-  if (response.ok) setStatus(response.label);
-  else setStatus(`정리하지 못했어요. ${response.error}`, true);
+  const response = await chrome.runtime.sendMessage(type === "clear-all" ? { type: "request-confirmation", action: type } : { type: "request-confirmation", action: type, url: activeUrl });
+  if (response.ok) setStatus("확인 창에서 계속해 주세요.");
+  else setStatus(`확인 창을 열지 못했어요. ${response.error}`, true);
   button.disabled = type === "clear-site" && !activeUrl;
 };
 
