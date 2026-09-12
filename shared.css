@@ -37,3 +37,34 @@ button { cursor: pointer; }
 .site-list .site-clear { margin-left: auto; padding: 4px 8px; border: 1px solid #d7cfae; border-radius: 7px; background: #fffbed; color: #5f594c; font-size: 11px; font-weight: 700; }
 footer { padding: 28px; background: #eee8d3; color: #746f63; text-align: center; font-size: 11px; } footer span { color: var(--yellow-deep); font-size: 16px; }
 @media (max-width: 700px) { .options-body { min-width: 0; }.topbar { gap: 20px; }.topbar-note { display: none; }.topbar nav { gap: 13px; }.type-grid { grid-template-columns: repeat(2, 1fr); }.scribble { right: 0; opacity: .4; }.site-form { flex-direction: column; } }
+
+/* Theme-aware popup: the blue is intentionally gentle so it supports the yellow brand. */
+.brand-tile, .brand-tile img { border-radius: 16px; }
+.brand-tile { border: 1px solid rgba(255,255,255,.09); }
+html[data-theme="dark"] .popup { background: radial-gradient(150px 160px at 100% 0%, rgba(64, 118, 201, .18), transparent 76%), linear-gradient(135deg, #030405, #090d13); }
+html[data-theme="light"] .popup { border-color: #d3ddea; background: radial-gradient(170px 160px at 100% 0%, rgba(101, 163, 230, .22), transparent 78%), linear-gradient(135deg, #fcfdff, #eef5ff); color: #20262e; box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 8px 20px rgba(42,73,112,.14); }
+html[data-theme="light"] .brand-tile { border-color: #d6e0ef; background: #fffefd; }
+html[data-theme="light"] .site-summary .eyebrow, html[data-theme="light"] .site-state { color: #667180; }
+html[data-theme="light"] .site-summary strong { color: #1d2732; }
+html[data-theme="light"] .action-primary { box-shadow: 0 3px 0 #c79600; }
+html[data-theme="light"] .action-secondary { border-color: #cad7e6; background: rgba(255,255,255,.72); color: #26313e; box-shadow: 0 3px 0 #d7e0eb; }
+html[data-theme="light"] .utility-row { border-color: #d8e1ec; }
+html[data-theme="light"] .shortcut-button, html[data-theme="light"] .gear-button { color: #364352; }
+html[data-theme="light"] .status { color: #826300; }
+
+.theme-picker { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; max-width: 620px; margin-top: 22px; }
+.theme-picker button { min-height: 104px; padding: 12px 10px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.45); color: var(--ink); text-align: left; transition: .16s; }.theme-picker button:hover { border-color: #bbaa75; transform: translateY(-1px); }.theme-picker button.is-selected { border-color: #d4a600; background: #fff6ca; box-shadow: inset 0 0 0 1px #f3cb31; }.theme-picker span, .theme-picker strong, .theme-picker small { display: block; }.theme-symbol { margin-bottom: 8px; color: var(--yellow-deep); font-size: 23px; line-height: 1; }.theme-picker strong { font-size: 13px; }.theme-picker small { margin-top: 4px; color: #7a7569; font-size: 10px; line-height: 1.35; }
+
+html[data-theme="dark"] { --paper: #111720; --ink: #f6f3e9; --line: #303946; }
+html[data-theme="dark"] .options-body { background: radial-gradient(520px 430px at 100% 0%, rgba(71, 128, 210, .17), transparent 72%), linear-gradient(115deg, #111720 0 68%, #172334 68%); }
+html[data-theme="dark"] .topbar nav a, html[data-theme="dark"] .topbar-note, html[data-theme="dark"] .hero > p:last-of-type, html[data-theme="dark"] .section-description, html[data-theme="dark"] .range-select { color: #b8c1cd; }
+html[data-theme="dark"] .settings-section { border-color: #303946; }
+html[data-theme="dark"] .type-card, html[data-theme="dark"] .theme-picker button { border-color: #384351; background: rgba(23,31,42,.7); }.theme-picker button.is-selected { color: #30290f; }
+html[data-theme="dark"] .type-card small, html[data-theme="dark"] .theme-picker small { color: #adb7c4; }
+html[data-theme="dark"] .range-select select, html[data-theme="dark"] .site-form input, html[data-theme="dark"] .command-list { border-color: #3b4653; background: #171e28; color: #f6f3e9; }
+html[data-theme="dark"] .site-list li, html[data-theme="dark"] .command-row { border-color: #303946; }
+html[data-theme="dark"] .site-list .site-clear { border-color: #4b5a6b; background: #1d2937; color: #f4efdd; }
+html[data-theme="dark"] .automatic-note { background: #1e2b3b; color: #c6d7ea; }
+html[data-theme="dark"] .interval-controls input { border-color: #465466; background: #171e28; color: #f6f3e9; }
+html[data-theme="dark"] footer { background: #0c1118; color: #aab4c0; }
+html[data-theme="dark"] .theme-picker button.is-selected { border-color: #e3b414; background: #fff0af; }

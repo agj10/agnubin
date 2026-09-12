@@ -22,7 +22,8 @@ export const DEFAULTS = {
   shortcutsEnabled: true,
   autoCleanOnClose: false,
   autoCleanOnInterval: false,
-  autoCleanIntervalMinutes: 60
+  autoCleanIntervalMinutes: 60,
+  theme: "system"
 };
 
 export const getSettings = async () => {

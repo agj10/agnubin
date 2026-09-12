@@ -1,11 +1,17 @@
 import { getSettings } from "./defaults.js";
+import { applyTheme } from "./theme.js";
 
 const $ = (selector) => document.querySelector(selector);
 let activeUrl = null;
 const setStatus = (message, error = false) => { $("#status").textContent = message; $("#status").classList.toggle("error", error); };
+const setTheme = (theme) => {
+  const resolved = applyTheme(theme);
+  $("#brand-icon").src = `assets/agnubin-${resolved}-raw.png`;
+};
 
 const render = async () => {
   const settings = await getSettings();
+  setTheme(settings.theme);
   $("#shortcut-label").textContent = settings.shortcutsEnabled ? "단축키 켜짐" : "단축키 꺼짐";
   $("#shortcut-toggle").classList.toggle("is-off", !settings.shortcutsEnabled);
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
@@ -36,3 +42,4 @@ $("#clear-site").addEventListener("click", () => clear("clear-site"));
 $("#shortcut-toggle").addEventListener("click", async () => { const { shortcutsEnabled } = await getSettings(); await chrome.storage.sync.set({ shortcutsEnabled: !shortcutsEnabled }); await render(); });
 $("#open-settings").addEventListener("click", () => chrome.runtime.openOptionsPage());
 render();
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", async () => setTheme((await getSettings()).theme));

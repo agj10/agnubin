@@ -1,4 +1,5 @@
 import { DATA_TYPES, DEFAULTS, getSettings } from "./defaults.js";
+import { applyTheme } from "./theme.js";
 
 const $ = (selector) => document.querySelector(selector);
 let settings;
@@ -32,6 +33,14 @@ const renderIntervalClean = () => {
   $("#interval-controls").classList.toggle("is-disabled", !enabled);
   $("#interval-note").textContent = enabled ? `켜짐 · ${settings.autoCleanIntervalMinutes}분마다 선택한 데이터를 정리합니다.` : "주기 정리는 꺼져 있어요.";
 };
+const renderTheme = () => {
+  applyTheme(settings.theme);
+  document.querySelectorAll("[data-theme-choice]").forEach((button) => {
+    const selected = button.dataset.themeChoice === settings.theme;
+    button.classList.toggle("is-selected", selected);
+    button.setAttribute("aria-checked", String(selected));
+  });
+};
 
 $("#time-range").addEventListener("change", async (event) => { settings.timeRange = event.target.value; await save(); });
 $("#site-form").addEventListener("submit", async (event) => { event.preventDefault(); try { const site = normalizeUrl($("#site-input").value.trim()); if (!settings.savedSites.includes(site)) settings.savedSites.push(site); $("#site-input").value = ""; await save(); renderSites(); } catch { $("#site-input").setCustomValidity("올바른 웹사이트 주소를 입력해 주세요."); $("#site-input").reportValidity(); $("#site-input").setCustomValidity(""); } });
@@ -55,5 +64,11 @@ $("#interval-minutes").addEventListener("change", async (event) => {
   await save();
   renderIntervalClean();
 });
+document.querySelectorAll("[data-theme-choice]").forEach((button) => button.addEventListener("click", async () => {
+  settings.theme = button.dataset.themeChoice;
+  await save();
+  renderTheme();
+}));
 
-(async () => { settings = await getSettings(); $("#time-range").value = settings.timeRange || DEFAULTS.timeRange; $("#auto-clean-toggle").checked = settings.autoCleanOnClose; $("#automatic-note").textContent = settings.autoCleanOnClose ? "켜짐 · 마지막 창이 닫히면 선택한 데이터를 정리합니다." : "자동 정리는 꺼져 있어요."; renderTypes(); renderSites(); renderIntervalClean(); renderCommands(); })();
+(async () => { settings = await getSettings(); $("#time-range").value = settings.timeRange || DEFAULTS.timeRange; $("#auto-clean-toggle").checked = settings.autoCleanOnClose; $("#automatic-note").textContent = settings.autoCleanOnClose ? "켜짐 · 마지막 창이 닫히면 선택한 데이터를 정리합니다." : "자동 정리는 꺼져 있어요."; renderTypes(); renderSites(); renderIntervalClean(); renderTheme(); renderCommands(); })();
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { if (settings?.theme === "system") renderTheme(); });
