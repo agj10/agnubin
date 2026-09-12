@@ -3,17 +3,16 @@
   <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>agnubin</title><link rel="stylesheet" href="shared.css"></head>
   <body class="popup-body">
     <main class="popup">
-      <header class="brand-row"><a class="brand" href="options.html" target="_blank" title="설정 열기">agnubin</a><span class="little-spark">✦</span></header>
-      <p class="intro">오늘 쌓인 브라우저 흔적을<br>가볍게 정리해요.</p>
-      <section class="site-card" id="site-card"><span class="site-mark">⌁</span><div><span class="eyebrow">현재 사이트</span><strong id="site-name">확인 중이에요</strong></div></section>
-      <div class="action-stack">
-        <button class="button button-main" id="clear-all"><span>선택한 데이터 지우기</span><b>↗</b></button>
-        <button class="button button-soft" id="clear-site" disabled><span id="site-action-label">현재 사이트만 지우기</span><b>⌫</b></button>
+      <header class="popup-header">
+        <div class="brand-tile"><img src="assets/agnubin-dark-raw.png" alt="agnubin"></div>
+        <section class="site-summary" id="site-card"><span class="eyebrow">현재 사이트</span><strong id="site-name">확인 중</strong><span class="site-state" id="site-state">선택한 항목을 정리할 수 있어요</span></section>
+      </header>
+      <div class="action-grid">
+        <button class="action-button action-primary" id="clear-all"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3m-8 0 1 13h8l1-13M10 11v5m4-5v5"/></svg><span>전체 정리</span></button>
+        <button class="action-button action-secondary" id="clear-site" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M4.8 8.5h14.4M4.8 15.5h14.4M12 4c2.2 2.2 3.2 4.9 3.2 8S14.2 17.8 12 20c-2.2-2.2-3.2-4.9-3.2-8S9.8 6.2 12 4"/></svg><span>이 사이트</span></button>
       </div>
-      <div class="divider"></div>
-      <div class="utility-row"><button class="text-button" id="shortcut-toggle"><span class="dot"></span><span id="shortcut-label">단축키 사용 중</span></button><button class="gear-button" id="open-settings" aria-label="설정 열기">⚙ <span>설정</span></button></div>
-      <p class="status" id="status" aria-live="polite">설정한 항목만 지워집니다.</p>
-      <i class="doodle doodle-one">⌁</i><i class="doodle doodle-two">✳</i>
+      <div class="utility-row"><button class="shortcut-button" id="shortcut-toggle"><span class="dot"></span><span id="shortcut-label">단축키 켜짐</span></button><button class="gear-button" id="open-settings" aria-label="설정 열기"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19 13.4v-2.8l-2-.7a7 7 0 0 0-.6-1.4l.9-1.9-2-2-1.9.9a7 7 0 0 0-1.4-.6L11 3H8.2l-.7 2a7 7 0 0 0-1.4.6l-1.9-.9-2 2 .9 1.9A7 7 0 0 0 2.5 10l-2 .6v2.8l2 .7a7 7 0 0 0 .6 1.4l-.9 1.9 2 2 1.9-.9a7 7 0 0 0 1.4.6l.7 2H11l.7-2a7 7 0 0 0 1.4-.6l1.9.9 2-2-.9-1.9a7 7 0 0 0 .6-1.4l2-.7Z"/></svg><span>설정</span></button></div>
+      <p class="status" id="status" aria-live="polite"></p>
     </main>
     <script type="module" src="popup.js"></script>
   </body>

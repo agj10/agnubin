@@ -6,17 +6,18 @@ const setStatus = (message, error = false) => { $("#status").textContent = messa
 
 const render = async () => {
   const settings = await getSettings();
-  $("#shortcut-label").textContent = settings.shortcutsEnabled ? "단축키 사용 중" : "단축키 꺼짐";
+  $("#shortcut-label").textContent = settings.shortcutsEnabled ? "단축키 켜짐" : "단축키 꺼짐";
   $("#shortcut-toggle").classList.toggle("is-off", !settings.shortcutsEnabled);
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
   if (tab?.url?.startsWith("http")) {
     activeUrl = tab.url;
     const hostname = new URL(tab.url).hostname.replace(/^www\./, "");
     $("#site-name").textContent = hostname;
-    $("#site-action-label").textContent = `${hostname}만 지우기`;
+    $("#site-state").textContent = "선택한 항목을 정리할 수 있어요";
     $("#clear-site").disabled = false;
   } else {
     $("#site-name").textContent = "이 페이지에서는 사용할 수 없어요";
+    $("#site-state").textContent = "웹사이트를 열면 이 사이트만 정리할 수 있어요";
   }
 };
 
