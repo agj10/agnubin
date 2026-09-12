@@ -2,6 +2,22 @@ import { dataObject, getSettings, sinceFor } from "./defaults.js";
 
 const PERIODIC_CLEAN_ALARM = "agnubin-periodic-clean";
 
+const getDataSummary = async () => {
+  const { timeRange } = await getSettings();
+  const since = sinceFor(timeRange);
+  const [history, downloads, cookies] = await Promise.all([
+    chrome.history.search({ text: "", startTime: since, maxResults: 100000 }),
+    chrome.downloads.search(since ? { startedAfter: new Date(since).toISOString(), limit: 100000 } : { limit: 100000 }),
+    chrome.cookies.getAll({})
+  ]);
+  const cookieBytes = cookies.reduce((total, cookie) => total + new TextEncoder().encode(`${cookie.name}=${cookie.value}`).byteLength, 0);
+  return {
+    history: { label: `${history.length.toLocaleString()}개`, detail: "선택한 기간의 방문 페이지 수" },
+    downloads: { label: `${downloads.length.toLocaleString()}개`, detail: "선택한 기간의 다운로드 기록 수" },
+    cookies: { bytes: cookieBytes, label: `${cookies.length.toLocaleString()}개`, detail: "쿠키의 이름과 값 기준 대략적인 용량" }
+  };
+};
+
 const clearAll = async () => {
   const settings = await getSettings();
   const types = dataObject(settings.selectedTypes);
@@ -32,6 +48,7 @@ const syncPeriodicCleanAlarm = async () => {
 
 const clearSite = async (url) => {
   const settings = await getSettings();
+  const selected = new Set(settings.selectedTypes);
   const origin = new URL(url).origin;
   // Origin filtering is only reliable for these site-scoped stores. Passing a
   // global-only type here could unintentionally clear it for every website.
@@ -101,6 +118,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   (async () => {
     if (message.type === "clear-all") sendResponse({ ok: true, ...(await clearAll()) });
     if (message.type === "clear-site") sendResponse({ ok: true, ...(await clearSite(message.url)) });
+    if (message.type === "get-data-summary") sendResponse({ ok: true, summary: await getDataSummary() });
   })().catch((error) => sendResponse({ ok: false, error: error.message }));
   return true;
 });

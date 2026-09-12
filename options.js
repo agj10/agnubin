@@ -5,10 +5,29 @@ const $ = (selector) => document.querySelector(selector);
 let settings;
 const normalizeUrl = (value) => { const url = new URL(/^https?:\/\//i.test(value) ? value : `https://${value}`); return url.origin; };
 const save = async () => chrome.storage.sync.set(settings);
+const formatBytes = (bytes) => {
+  if (!Number.isFinite(bytes)) return "용량 정보 없음";
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 ** 2) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / 1024 ** 2).toFixed(1)} MB`;
+};
 
 const renderTypes = () => {
-  $("#type-grid").innerHTML = DATA_TYPES.filter(({ available }) => available !== false).map(({ id, label, note }) => `<label class="type-card"><input type="checkbox" value="${id}" ${settings.selectedTypes.includes(id) ? "checked" : ""}><span class="checkmark">✓</span><span><strong>${label}</strong><small>${note}</small></span></label>`).join("");
+  $("#type-grid").innerHTML = DATA_TYPES.filter(({ available }) => available !== false).map(({ id, label, note }) => `<label class="type-card"><input type="checkbox" value="${id}" ${settings.selectedTypes.includes(id) ? "checked" : ""}><span class="checkmark">✓</span><span><strong>${label}</strong><small>${note}</small><em class="data-summary" data-summary-for="${id}">집계 중</em></span></label>`).join("");
   document.querySelectorAll(".type-card input").forEach((input) => input.addEventListener("change", async () => { settings.selectedTypes = [...document.querySelectorAll(".type-card input:checked")].map((item) => item.value); await save(); }));
+};
+const renderDataSummary = async () => {
+  try {
+    const response = await chrome.runtime.sendMessage({ type: "get-data-summary" });
+    if (!response?.ok) throw new Error(response?.error);
+    document.querySelectorAll("[data-summary-for]").forEach((element) => {
+      const summary = response.summary[element.dataset.summaryFor];
+      element.textContent = summary?.bytes !== undefined ? `${formatBytes(summary.bytes)}${summary.label ? ` · ${summary.label}` : ""}` : summary?.label || "용량 정보 없음";
+      element.title = summary?.detail || "Chrome에서 항목별 용량을 제공하지 않습니다.";
+    });
+  } catch {
+    document.querySelectorAll("[data-summary-for]").forEach((element) => { element.textContent = "집계 불가"; });
+  }
 };
 const renderSites = () => {
   $("#site-list").innerHTML = settings.savedSites.length
@@ -42,7 +61,7 @@ const renderTheme = () => {
   });
 };
 
-$("#time-range").addEventListener("change", async (event) => { settings.timeRange = event.target.value; await save(); });
+$("#time-range").addEventListener("change", async (event) => { settings.timeRange = event.target.value; await save(); renderDataSummary(); });
 $("#site-form").addEventListener("submit", async (event) => { event.preventDefault(); try { const site = normalizeUrl($("#site-input").value.trim()); if (!settings.savedSites.includes(site)) settings.savedSites.push(site); $("#site-input").value = ""; await save(); renderSites(); } catch { $("#site-input").setCustomValidity("올바른 웹사이트 주소를 입력해 주세요."); $("#site-input").reportValidity(); $("#site-input").setCustomValidity(""); } });
 $("#open-shortcuts").addEventListener("click", () => {
   const scheme = navigator.userAgent.includes("Edg/") ? "edge" : "chrome";
@@ -69,5 +88,5 @@ document.querySelectorAll("[data-theme-choice]").forEach((button) => button.addE
   renderTheme();
 }));
 
-(async () => { settings = await getSettings(); $("#time-range").value = settings.timeRange || DEFAULTS.timeRange; $("#auto-clean-toggle").checked = settings.autoCleanOnClose; renderTypes(); renderSites(); renderIntervalClean(); renderTheme(); renderCommands(); })();
+(async () => { settings = await getSettings(); $("#time-range").value = settings.timeRange || DEFAULTS.timeRange; $("#auto-clean-toggle").checked = settings.autoCleanOnClose; renderTypes(); renderSites(); renderIntervalClean(); renderTheme(); renderCommands(); renderDataSummary(); })();
 window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { if (settings?.theme === "system") renderTheme(); });

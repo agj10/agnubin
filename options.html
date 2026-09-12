@@ -9,15 +9,19 @@
     <main class="options-main">
       <section class="settings-section" id="data">
         <div class="section-head"><h1>지울 항목</h1><label class="range-select">기간 <select id="time-range"><option value="hour">최근 1시간</option><option value="day">최근 24시간</option><option value="week">최근 7일</option><option value="month">최근 30일</option><option value="all">전체 기간</option></select></label></div>
+        <p class="section-note">현재 사이트 정리는 방문 기록과 사이트 데이터에만 적용됩니다.</p>
         <div class="type-grid" id="type-grid"></div>
+        <p class="section-note data-note">용량을 제공하지 않는 항목은 건수 또는 “용량 정보 없음”으로 표시됩니다.</p>
       </section>
       <section class="settings-section" id="sites">
         <h2>사이트</h2>
+        <p class="section-note">등록한 사이트는 여기서 바로 정리할 수 있습니다.</p>
         <form class="site-form" id="site-form"><input id="site-input" type="text" placeholder="https://example.com" autocomplete="off"><button class="button button-main" type="submit">추가</button></form>
         <ul class="site-list" id="site-list"></ul>
       </section>
       <section class="settings-section" id="auto-clean">
         <h2>자동 정리</h2>
+        <p class="section-note">탭은 유지하고 선택한 데이터만 지웁니다.</p>
         <div class="setting-row"><span>브라우저를 닫을 때</span><label class="switch"><input id="auto-clean-toggle" type="checkbox"><span class="switch-track" aria-hidden="true"></span><span class="sr-only">브라우저를 닫을 때 자동 정리</span></label></div>
         <div class="setting-row"><span>주기 정리</span><div class="interval-controls" id="interval-controls"><label>매 <input id="interval-minutes" type="number" min="1" max="10080" step="1" inputmode="numeric"> 분</label><label class="switch"><input id="interval-clean-toggle" type="checkbox"><span class="switch-track" aria-hidden="true"></span><span class="sr-only">주기마다 자동 정리</span></label></div></div>
       </section>
